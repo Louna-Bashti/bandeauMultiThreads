@@ -2,6 +2,8 @@ package bandeau;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +27,8 @@ class ScenarioElement {
 public class Scenario extends Thread {
 
     private boolean iAmFree = true;
-    private boolean jeContinue = true;
+
+
 
 
     private final List<ScenarioElement> myElements = new LinkedList<>();
@@ -58,6 +61,7 @@ public class Scenario extends Thread {
 
         Thread thread = new Thread(
                 () -> {
+                    iAmFree=false;
                     b.verrouillerBandeau();
                     for (
                             ScenarioElement element : myElements) {

@@ -23,6 +23,7 @@ public class ExerciceAvecThreads {
         // On doit jouer le scénario en même temps sur les trois bandeaux
         s.playOn(b1);
         s.playOn(b2);
+        s.addEffect(new Zoom("Je zoome", 50), 1);
         s.playOn(b3);
 
 
