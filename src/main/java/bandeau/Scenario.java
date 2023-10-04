@@ -1,12 +1,14 @@
 package bandeau;
+
 import java.util.List;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe utilitaire pour représenter la classe-association UML
  */
 class ScenarioElement {
-
     Effect effect;
     int repeats;
 
@@ -15,22 +17,36 @@ class ScenarioElement {
         repeats = r;
     }
 }
+
 /**
  * Un scenario mémorise une liste d'effets, et le nombre de repetitions pour chaque effet
  * Un scenario sait se jouer sur un bandeau.
  */
-public class Scenario {
+public class Scenario extends Thread {
+
+    private boolean iAmFree = true;
+    private boolean jeContinue = true;
+
 
     private final List<ScenarioElement> myElements = new LinkedList<>();
+
+
+    public Scenario() {
+    }
 
     /**
      * Ajouter un effect au scenario.
      *
-     * @param e l'effet à ajouter
+     * @param e       l'effet à ajouter
      * @param repeats le nombre de répétitions pour cet effet
      */
     public void addEffect(Effect e, int repeats) {
-        myElements.add(new ScenarioElement(e, repeats));
+        if (!iAmFree) {
+            System.out.println("Scénario en cours de défilement");
+        } // on ne peut pas modifier
+        else {
+            myElements.add(new ScenarioElement(e, repeats));
+        }
     }
 
     /**
@@ -38,11 +54,22 @@ public class Scenario {
      *
      * @param b le bandeau ou s'afficher.
      */
-    public void playOn(Bandeau b) {
-        for (ScenarioElement element : myElements) {
-            for (int repeats = 0; repeats < element.repeats; repeats++) {
-                element.effect.playOn(b);
-            }
-        }
+    public void playOn(BandeauLock b) {
+
+        Thread thread = new Thread(
+                () -> {
+                    b.verrouillerBandeau();
+                    for (
+                            ScenarioElement element : myElements) {
+                        for (int repeats = 0; repeats < element.repeats; repeats++) {
+                            element.effect.playOn(b);
+                        }
+                    }
+                    b.déverrouillerBandeau();
+                }
+        );
+        thread.start();
     }
+
+
 }

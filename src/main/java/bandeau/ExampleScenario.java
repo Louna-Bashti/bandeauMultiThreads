@@ -1,5 +1,8 @@
 package bandeau;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ExampleScenario {
 
     /**
@@ -15,6 +18,9 @@ public class ExampleScenario {
         } else {
             message = "Démonstration du bandeau";
         }
+        List<BandeauLock> list=new ArrayList<>();
+        BandeauLock b= new BandeauLock();
+        list.add(b);
 
         ExampleScenario instance = new ExampleScenario();
         instance.exemple(message);
@@ -34,12 +40,11 @@ public class ExampleScenario {
         s.addEffect(new Rotate("2 tours à droite", 180, 4000, true), 2);
         s.addEffect(new Rotate("2 tours à gauche", 180, 4000, false), 2);
         // On cree le bandeau
-        Bandeau b = new Bandeau();
+        BandeauLock b = new BandeauLock();
         b.setMessage(message);
         b.sleep(2000);
         // On joue le scenario sur le bandeau
-        s.playOn(b);
-        b.close();
+
     }
 
 }
